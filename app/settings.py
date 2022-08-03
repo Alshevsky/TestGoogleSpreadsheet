@@ -133,3 +133,8 @@ DJANGO_CELERY_BEAT_TZ_AWARE = False
 CBR_RU_URL = os.getenv('CBR_RU_URL', None)
 SPREADSHEET_ID = os.getenv('SPREADSHEET_ID', None)
 API_KEY = os.getenv('API_KEY', None)
+
+# Время работы тасок
+# Время в минутах для тестирования
+TIME_TO_UPDATING_RATE = os.getenv('TIME_TO_UPDATING_RATE', 120)  # Время обновления круса (в минутах)
+TIME_TO_TABLE_PARSER = os.getenv('TIME_TO_TABLE_PARSER', 20)  # Время обновления таблицы (в минутах)
