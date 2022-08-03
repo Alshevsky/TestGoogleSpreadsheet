@@ -22,31 +22,41 @@ cp example.env .env
 3. Change a random string for `SECRET_KEY` in `.env`.
 4. Add your `SPREADSHEET_ID` and `API_KEY` in `.env`.
 
-5. Install dependencies:
+6. Specify the working time of the task in `.env` (the time is indicated in minutes):
+```
+TIME_TO_UPDATING_RATE = 120
+TIME_TO_TABLE_PARSER = 20
+```
+
+6. Install dependencies:
 
 ```
 pipenv install
 pipenv shell
 ```
 
-6. Up docker-compose, migrate database and create super user:
+7. Up docker-compose, migrate database and create super user:
 
 ```
 docker-compose up -d
-python3 backend/manage.py makemigrations
-python3 backend/manage.py migrate
-python3 backend/manage.py createsuperuser
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
 ```
 
-7. Run the server:
+8. Run the server:
 
 ```
-python3 backend/manage.py runserver
+python3 manage.py runserver
 ```
 
 ## celery start 
 ```
-celery -A app worker - l info -B
+celery -A app worker -l info -B
 ```
 
-7. Enjoy!
+9. Enjoy!
+
+https://docs.google.com/spreadsheets/d/1VPeSZlxXnhP0pu4xdoXlWVj6dZZR-ZfpiNIldgHHLpY/edit#gid=0
+
+api = AIzaSyDCT2lgkKdmbMJlcUKNQPi1w66UGy75_9g
