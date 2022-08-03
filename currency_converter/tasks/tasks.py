@@ -17,6 +17,7 @@ dict_data: dict = xmltodict.parse(data.content)
 
 @app.task
 def updating_exchange_rate():
+    """Собираем актуальный курс рубля"""
     today_currencies = Currencies.objects.filter(dated=today).exists()
     if today_currencies:
         return print('Курс уже актуальный')
