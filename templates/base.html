@@ -1,0 +1,50 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Таблица</title>
+  <style>
+   TABLE {
+    width: 1000px; /* Ширина таблицы */
+   }
+   TD, TH {
+    padding: 3px; /* Поля вокруг содержимого ячеек */
+   }
+   TH {
+    text-align: left; /* Выравнивание по левому краю */
+    border-bottom: 1px solid #000; /* Линия снизу */
+   }
+   .vl {
+    border-right: 1px solid #000; /* Линия справа */
+   }
+  </style>
+ <body>
+{% if currencies %}
+  <table>
+   <tr>
+    <th class="vl">&nbsp;</th><th>Доллар США</th><th>Российский Рубль</th><th>Дата курса</th>
+   </tr>
+   <tr>
+    <td class="vl">Актуальный курс</td><td class="vl">{{currencies.usd}}</td><td class="vl">{{currencies.rub}}</td><td class="vl">{{currencies.dated}}</td>
+  </table>
+{% endif %}
+{% if orders %}
+  <table>
+   <h1>Таблица заказов</h1>
+   <tr>
+    <th class="vl">№</th>
+    <th class="vl">заказ №</th>
+    <th class="vl">стоимость,$</th>
+    <th class="vl">стоимость,RUB</th>
+    <th class="vl">срок поставки</th>
+    <th class="vl">Просрочен ли заказ</th>
+   </tr>
+      {% for order in orders %}
+   <tr><td class="vl">{{order.id}}</td><td class="vl">{{order.self_number}}</td><td class="vl">{{order.order_cost_usd}}</td><td class="vl">
+    {{order.order_cost_rub}}</td><td class="vl">{{order.delivery_time}}</td><td class="vl">{{order.delivery_overdue}}</td></tr>
+      {% endfor %}
+  </table>
+{% else %}
+<h2>Нет данных для отображения</h2>
+{% endif %}
+ </body>
+</html>
