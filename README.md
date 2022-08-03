@@ -46,7 +46,7 @@ python3 manage.py runserver
 
 ## celery start 
 ```
-celery -A app worker - l info -B
+celery -A app worker -l info -B
 ```
 
 7. Enjoy!
