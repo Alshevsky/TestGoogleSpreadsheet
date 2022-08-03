@@ -41,7 +41,7 @@ python3 manage.py createsuperuser
 7. Run the server:
 
 ```
-python3 backend/manage.py runserver
+python3 manage.py runserver
 ```
 
 ## celery start 
