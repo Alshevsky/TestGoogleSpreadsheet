@@ -56,9 +56,3 @@ celery -A app worker -l info -B
 ```
 
 9. Enjoy!
-
-https://docs.google.com/spreadsheets/d/1VPeSZlxXnhP0pu4xdoXlWVj6dZZR-ZfpiNIldgHHLpY/edit#gid=0
-
-SPREADSHEET_ID = 1VPeSZlxXnhP0pu4xdoXlWVj6dZZR-ZfpiNIldgHHLpY
-
-API_KEY = AIzaSyDCT2lgkKdmbMJlcUKNQPi1w66UGy75_9g
