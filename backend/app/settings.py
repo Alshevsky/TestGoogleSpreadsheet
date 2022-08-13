@@ -7,7 +7,7 @@ from environs import Env
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 env = Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
-env.read_env(os.path.join(BASE_DIR, '.env'), recurse=True)
+env.read_env(os.path.join(BASE_DIR.parent, '.env'), recurse=True)
 
 
 SECRET_KEY = os.getenv('SECRET_KEY', '')
@@ -45,7 +45,10 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [
+            'templates',
+            os.path.join(BASE_DIR, '..', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,6 +124,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Celery
 REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
 REDIS_PORT = env.int('REDIS_PORT', '6379')
+CELERY_PORT = env.int('CELERY_PORT', '5566')
 
 CELERY_BROKER_URL = 'redis://{}:{}/2'.format(REDIS_HOST, REDIS_PORT)
 CELERY_RESULT_BACKEND = 'redis://{}:{}/2'.format(REDIS_HOST, REDIS_PORT)

@@ -1,21 +1,25 @@
-# pull official base image
-FROM python:3.8-slim-buster
+FROM python:3.8-slim
 
-# set work directory
-WORKDIR /code/
-
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install dependencies
-COPY Pipfile /code/
-RUN pip3 install pipenv
-RUN pipenv install
+RUN mkdir -p /code
+
+COPY Pipfile Pipfile.lock /code/
+
+WORKDIR /code
+
+RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
-RUN pip install celery
 
+COPY backend /code/backend/
 
+COPY run.sh /code/
+COPY uwsgi.ini /code/
+#ENTRYPOINT ["sh", "/run.sh"]
+#ENTRYPOINT ["/backend/run.sh"]
+#CMD ["chmod +x", "/run.sh"]
 
-# copy project
-COPY . /code/
+RUN mkdir -p /var/log/uwsgi/
+WORKDIR /code/backend/
+
+EXPOSE 8080

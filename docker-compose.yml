@@ -1,7 +1,6 @@
 version: '3.6'
 
 services:
-
   postgres:
     image: postgres:11-alpine
     environment:
@@ -19,28 +18,31 @@ services:
     ports:
       - '6379:6379'
 
-#  celery:
-#    build: ./
-#    command: celery -A app worker -l info -B
+#  web:
+#    build: .
+#    command: chmod +x "/code/run.sh"
 #    restart: always
-#    volumes:
-#      - './:/app/'
 #    env_file:
 #      - .env
-#    ports:
-#      - "5566:5566"
 #    depends_on:
 #      - postgres
-#      - redis
-
-#  celery-beat:
-#    build: ./
-#    command: celery -A app beat -l info
+#    container_name: django_web
 #    volumes:
-#      - './:/app/'
-#    environment:
-#      - DEBUG
-#      - SECRET_KEY
-#      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-#    depends_on:
-#      - redis
+#      - ./backend:/code/backend
+#    ports:
+#      - '8000:8000'
+
+  celery:
+    build: .
+    command: celery -A app worker --loglevel=info -B -c 1 -E
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5566:5566"
+    depends_on:
+      - postgres
+      - redis
+#      - web
+    volumes:
+      - ./backend:/code/backend
