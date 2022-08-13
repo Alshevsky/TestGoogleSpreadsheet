@@ -37,10 +37,11 @@ def update_data_sheets(order: Orders, order_dict: dict):
 
 
 def parser_requests_date():
-    # Делаем запрос на google API, указывая ID таблицы и свой API KEY
-    url: str = 'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}?includeGridData=true&key={api_key}'.format(
-        spreadsheet_id=SPREADSHEET_ID, api_key=API_KEY
-    )
+    """Делаем запрос на google API, указывая ID таблицы и свой API KEY"""
+    url: str = (
+        'https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}?includeGridData=true&key={api_key}'.format(
+            spreadsheet_id=SPREADSHEET_ID, api_key=API_KEY
+        ))
     main_data = None
     response = requests.get(url)
     data_dict = response.json()
@@ -53,18 +54,8 @@ def parser_requests_date():
     return main_data
 
 
-@app.task
-def table_parser():
-    """Основной парсер гугл таблицы"""
-
-    list_data_ids = []
-    values_dict = {
-        0: 'self_number',
-        1: 'order_cost',
-        2: 'delivery_time',
-    }
-
-    main_data = parser_requests_date()
+def get_actual_course():
+    """Получаем актуальный курс"""
     curse = Currencies.objects.filter().only('rub', 'id').order_by('-id').first()
     if curse:
         rubles: Decimal = curse.rub
@@ -81,6 +72,22 @@ def table_parser():
         print('_' * 50)
         print('Курс обновлен.')
         rubles: Decimal = curse.rub
+    return rubles
+
+
+@app.task
+def table_parser():
+    """Основной парсер гугл таблицы"""
+
+    list_data_ids = []
+    values_dict = {
+        0: 'self_number',
+        1: 'order_cost',
+        2: 'delivery_time',
+    }
+
+    main_data = parser_requests_date()
+    rubles: Decimal = get_actual_course()
 
     if main_data:
         for el in main_data[1:]:
