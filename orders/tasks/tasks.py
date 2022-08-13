@@ -76,7 +76,7 @@ def table_parser():
         while curse is None and count <= 10:
             print(f'Попытка № {count}')
             updating_exchange_rate()
-            curse = Currencies.objects.filter().only('rub', 'id').order_by('-id').first()
+            curse = Currencies.objects.filter().only('rub').first()
             count += 1
         print('_' * 50)
         print('Курс обновлен.')
