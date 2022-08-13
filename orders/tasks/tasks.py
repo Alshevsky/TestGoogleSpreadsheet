@@ -17,8 +17,7 @@ def delete_data_sheets(data_list: list):
     """Удаляем данные, которых нет в гугл таблице"""
     data_for_delete = Orders.objects.filter().exclude(id__in=data_list)
     if data_for_delete.exists():
-        for el in data_for_delete:
-            el.delete()
+        return data_for_delete.delete()
 
 
 def update_data_sheets(order: Orders, order_dict: dict):
