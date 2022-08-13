@@ -16,10 +16,10 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.now = timezone.now
 
 app.conf.beat_schedule = {
-    'updating_exchange_rate': {
-        'task': 'currency_converter.tasks.tasks.updating_exchange_rate',
-        'schedule': crontab(minute=f'*/{TIME_TO_UPDATING_RATE}'),
-    },
+    # 'updating_exchange_rate': {
+    #     'task': 'currency_converter.tasks.tasks.updating_exchange_rate',
+    #     'schedule': crontab(minute=f'*/{TIME_TO_UPDATING_RATE}'),
+    # },
     'table_parser': {
         'task': 'orders.tasks.tasks.table_parser',
         'schedule': crontab(minute=f'*/{TIME_TO_TABLE_PARSER}'),

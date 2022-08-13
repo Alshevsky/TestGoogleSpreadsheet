@@ -5,6 +5,7 @@ import requests
 from django.conf import settings
 
 from app.celery import app
+from currency_converter.tasks import updating_exchange_rate
 from orders.models import Orders
 from currency_converter.models import Currencies
 
@@ -64,12 +65,22 @@ def table_parser():
     }
 
     main_data = parser_requests_date()
-    curse = Currencies.objects.filter().only('rub').first()
+    curse = Currencies.objects.filter().only('rub', 'id').order_by('-id').first()
     if curse:
         rubles: Decimal = curse.rub
     else:
-        instance = Currencies.objects.create(rub='50.0')
-        rubles: Decimal = Decimal(instance.rub)
+        count = 1
+        print('Актуального курса в базе данных не найдено!')
+        print('Пытаюсь обновить курс валют...')
+        print('_' * 50)
+        while curse is None and count <= 10:
+            print(f'Попытка № {count}')
+            updating_exchange_rate()
+            curse = Currencies.objects.filter().only('rub', 'id').order_by('-id').first()
+            count += 1
+        print('_' * 50)
+        print('Курс обновлен.')
+        rubles: Decimal = curse.rub
 
     if main_data:
         for el in main_data[1:]:
