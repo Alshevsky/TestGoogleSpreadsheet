@@ -61,17 +61,24 @@ def get_actual_course():
         rubles: Decimal = curse.rub
     else:
         count = 1
+        max_count = 10
         print('Актуального курса в базе данных не найдено!')
         print('Пытаюсь обновить курс валют...')
         print('_' * 50)
-        while curse is None and count <= 10:
-            print(f'Попытка № {count}')
+        while curse is None and count <= max_count:
+            print(f'Попытка № {count} из {max_count}')
             updating_exchange_rate()
             curse = Currencies.objects.filter().only('rub').first()
             count += 1
         print('_' * 50)
-        print('Курс обновлен.')
-        rubles: Decimal = curse.rub
+        if curse:
+            print('Курс обновлен.')
+            rubles: Decimal = curse.rub
+            print(f'Акутальный курс установлен: {rubles} рублей за доллар')
+        else:
+            print('Неудалось установить соединение с ЦБРФ!')
+            print('По-умолчанию курс примем 60 рублей за доллар')
+            rubles: Decimal = Decimal(60.0)
     return rubles
 
 
