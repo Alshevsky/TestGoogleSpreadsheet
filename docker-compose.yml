@@ -8,10 +8,8 @@ services:
       - ./backend:/code/backend
     ports:
       - '8000:8000'
-    environment:
-      - DEBUG
-      - SECRET_KEY
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    env_file:
+      - .env
     depends_on:
       - redis
 
@@ -22,7 +20,7 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
     ports:
-      - '5436:5436'
+      - '5432:5432'
     volumes:
       - ./postgresql/dumps:/code/dumps
       - ./postgresql/data:/var/lib/postgresql/data
@@ -50,9 +48,7 @@ services:
     command: celery -A core beat -l info
     volumes:
       - ./backend:/code/backend
-    environment:
-      - DEBUG
-      - SECRET_KEY
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    env_file:
+      - .env
     depends_on:
       - redis
