@@ -1,6 +1,20 @@
 version: '3.6'
 
 services:
+  web:
+    build: .
+    command: sh -c "/code/run.sh"
+    volumes:
+      - ./backend:/code/backend
+    ports:
+      - '8000:8000'
+    environment:
+      - DEBUG
+      - SECRET_KEY
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - redis
+
   postgres:
     image: postgres:11-alpine
     environment:
@@ -8,7 +22,7 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
     ports:
-      - '${POSTGRES_PORT}:5432'
+      - '5436:5436'
     volumes:
       - ./postgresql/dumps:/code/dumps
       - ./postgresql/data:/var/lib/postgresql/data
@@ -17,20 +31,6 @@ services:
     image: redis:alpine
     ports:
       - '6379:6379'
-
-#  web:
-#    build: .
-#    command: chmod +x "/code/run.sh"
-#    restart: always
-#    env_file:
-#      - .env
-#    depends_on:
-#      - postgres
-#    container_name: django_web
-#    volumes:
-#      - ./backend:/code/backend
-#    ports:
-#      - '8000:8000'
 
   celery:
     build: .
@@ -41,8 +41,18 @@ services:
     ports:
       - "5566:5566"
     depends_on:
-      - postgres
       - redis
-#      - web
     volumes:
       - ./backend:/code/backend
+
+  celery-beat:
+    build: .
+    command: celery -A core beat -l info
+    volumes:
+      - ./backend:/code/backend
+    environment:
+      - DEBUG
+      - SECRET_KEY
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - redis

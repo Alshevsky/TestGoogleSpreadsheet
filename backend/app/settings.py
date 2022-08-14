@@ -74,10 +74,9 @@ DATABASES = {
         'USER': env('POSTGRES_USER'),
         'PASSWORD': env('POSTGRES_PASSWORD'),
         'HOST': env('POSTGRES_HOST'),
-        'PORT': env.int('POSTGRES_PORT'),
+        'PORT': env.int('POSTGRES_PORT', 5436),
     },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -126,8 +125,8 @@ REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
 REDIS_PORT = env.int('REDIS_PORT', '6379')
 CELERY_PORT = env.int('CELERY_PORT', '5566')
 
-CELERY_BROKER_URL = 'redis://{}:{}/2'.format(REDIS_HOST, REDIS_PORT)
-CELERY_RESULT_BACKEND = 'redis://{}:{}/2'.format(REDIS_HOST, REDIS_PORT)
+CELERY_BROKER_URL = 'redis://{}:{}'.format(REDIS_HOST, REDIS_PORT)
+CELERY_RESULT_BACKEND = 'redis://{}:{}'.format(REDIS_HOST, REDIS_PORT)
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -140,5 +139,5 @@ API_KEY = os.getenv('API_KEY', None)
 
 # Время работы тасок
 # Время в минутах для тестирования
-TIME_TO_UPDATING_RATE = os.getenv('TIME_TO_UPDATING_RATE', 120)  # Время обновления круса (в минутах)
+TIME_TO_UPDATING_RATE = os.getenv('TIME_TO_UPDATING_RATE', 120)  # Время обновления курса (в минутах)
 TIME_TO_TABLE_PARSER = os.getenv('TIME_TO_TABLE_PARSER', 20)  # Время обновления таблицы (в минутах)
