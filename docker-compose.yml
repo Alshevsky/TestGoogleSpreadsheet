@@ -12,14 +12,12 @@ services:
       - .env
     depends_on:
       - redis
+      - postgres
 
   postgres:
     image: postgres:11-alpine
-    environment:
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_HOST_AUTH_METHOD=trust
+    env_file:
+      - .env
     ports:
       - '5432:5432'
     volumes:
@@ -41,6 +39,7 @@ services:
       - "5566:5566"
     depends_on:
       - redis
+      - postgres
     volumes:
       - ./backend:/code/backend
 
@@ -53,3 +52,4 @@ services:
       - .env
     depends_on:
       - redis
+      - postgres
